@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+const { Schema, model } = require("mongoose");
 const FoodCatergory = require("./food_category_model");
 
 const foodSchema = new Schema(

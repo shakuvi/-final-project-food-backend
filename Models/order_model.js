@@ -1,5 +1,5 @@
-import { Schema, model } from "mongoose";
-const User = require("./user_model");
+const { Schema, model } = require("mongoose");
+const User = require("../models/user_model");
 const OrderType = require("./order_type_model");
 const Table = require("./table_model");
 const Employee = require("./employee_model");
