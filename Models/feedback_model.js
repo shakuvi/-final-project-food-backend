@@ -1,9 +1,13 @@
-import { Schema, model } from "mongoose";
+const { Schema, model } = require("mongoose");
+// const User = require("./user_model");
 
-const feedbackSchema = new Schema({
-  feedback: { type: String },
-  userID: { type: Schema.Types.ObjectId, ref: "users" }, //Get object id from user_model
-  /*Need to add order ID*/
-});
+const feedbackSchema = new Schema(
+  {
+    feedback: { type: String },
+    userID: { type: Schema.Types.ObjectId, ref: "User" }, //Get object id from user_model
+    /*Need to add order ID*/
+  },
+  { collection: "feedbacks" }
+);
 
-export default model("feedbacks", feedbackSchema);
+module.exports = model("Feedback", feedbackSchema);
