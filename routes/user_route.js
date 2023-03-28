@@ -2,6 +2,7 @@ const express = require("express");
 const userRoute = express.Router();
 const User = require("../models/user_model");
 
+//Save Users to database
 userRoute.route("/create").post((req, res) => {
   const {
     firstName,

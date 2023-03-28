@@ -2,6 +2,7 @@ const express = require("express");
 const tableRoute = express.Router();
 const Table = require("../models/table_model");
 
+//Add tables to database
 tableRoute.route("/create").post((req, res) => {
   const { tableName } = req.body;
   const table = new Table({

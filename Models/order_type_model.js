@@ -2,7 +2,7 @@ const { Schema, model } = require("mongoose");
 
 const orderTypeSchema = new Schema(
   {
-    ordertype: { type: String },
+    orderType: { type: String },
   },
   { collection: "orderTypes" }
 );
