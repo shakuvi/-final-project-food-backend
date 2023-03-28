@@ -24,10 +24,10 @@ userRoute.route("/create").post((req, res) => {
   user
     .save()
     .then((user) => {
-      res.send({ status: "sucess", user });
+      res.status(200).send({ status: "sucess", user });
     })
     .catch((e) => {
-      res.send({ status: "faliure" });
+      res.status(200).send({ status: "faliure" });
     });
 });
 
