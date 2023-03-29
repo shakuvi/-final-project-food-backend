@@ -29,7 +29,7 @@ foodRoute.route("/get-all").get((req, res) => {
       res.status(200).send({ status: "sucess", food });
     })
     .catch((e) => {
-      res.status(200).send({ status: "faliure" });
+      res.status(400).send({ status: "faliure" });
     });
 });
 
