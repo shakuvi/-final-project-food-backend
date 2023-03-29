@@ -32,4 +32,9 @@ employeeRoute.route("/create").post((req, res) => {
     });
 });
 
+//Get all employees
+employeeRoute.route("/get-all").post((req, res) => {
+  Employee.find();
+});
+
 module.exports = employeeRoute;

@@ -32,4 +32,15 @@ userRoute.route("/create").post((req, res) => {
     });
 });
 
+//View all users
+userRoute.route("/get-all").post((req, res) => {
+  User.find()
+    .then((user) => {
+      res.status(200).send({ status: "sucess", user });
+    })
+    .catch((e) => {
+      res.status(200).send({ status: "faliure" });
+    });
+});
+
 module.exports = userRoute;

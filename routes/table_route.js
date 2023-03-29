@@ -18,4 +18,15 @@ tableRoute.route("/create").post((req, res) => {
     });
 });
 
+//View all tables
+tableRoute.route("/get-all").post((req, res) => {
+  Table.find()
+    .then((table) => {
+      res.status(200).send({ status: "sucess", table });
+    })
+    .catch((e) => {
+      res.status(200).send({ status: "faliure" });
+    });
+});
+
 module.exports = tableRoute;
