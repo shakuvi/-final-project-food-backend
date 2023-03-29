@@ -10,6 +10,7 @@ const orderItemRoute = require("./routes/order_items_route");
 const foodRoute = require("./routes/food_route");
 const foodcatergoryRoute = require("./routes/food_category_route");
 const feedbackRoute = require("./routes/feedback_route");
+const employeeRoute = require("./routes/employee_route");
 
 const app = express();
 const PORT = 5000;
@@ -31,6 +32,7 @@ app.use("/orderitems", orderItemRoute);
 app.use("/food", foodRoute);
 app.use("/foodcatergory", foodcatergoryRoute);
 app.use("/feedback", feedbackRoute);
+app.use("/employee", employeeRoute);
 
 app.listen(PORT, () => {
   console.log("Server is running on Port:", PORT);
