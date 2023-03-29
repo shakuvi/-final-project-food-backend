@@ -10,7 +10,6 @@ const orderSchema = new Schema(
     createTime: { type: String },
     status: { type: String },
     orderedBy: { type: Schema.Types.ObjectId, ref: "User" },
-    dateOfBirth: { type: String },
     billValue: { type: String },
     discount: { type: String },
     orderType: { type: Schema.Types.ObjectId, ref: "OrderType" },
