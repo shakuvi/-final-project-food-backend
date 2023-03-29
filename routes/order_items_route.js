@@ -4,9 +4,12 @@ const OrderItemWithQuantity = require("../models/order_items_model");
 
 //Order Items with quantity
 orderItemRoute.route("/create").post((req, res) => {
-  const { orderType } = req.body;
+  const { orderID, food, quanitity, price } = req.body;
   const orderitemwithquantity = new OrderItemWithQuantity({
-    orderType,
+    orderID,
+    food,
+    quanitity,
+    price,
   });
   orderitemwithquantity
     .save()
