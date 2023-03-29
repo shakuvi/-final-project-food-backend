@@ -8,6 +8,8 @@ const orderTypeRoute = require("./routes/order_type_route");
 const orderRoute = require("./routes/order_route");
 const orderItemRoute = require("./routes/order_items_route");
 const foodRoute = require("./routes/food_route");
+const foodcatergoryRoute = require("./routes/food_category_route");
+const feedbackRoute = require("./routes/feedback_route");
 
 const app = express();
 const PORT = 5000;
@@ -27,6 +29,8 @@ app.use("/ordertype", orderTypeRoute);
 app.use("/order", orderRoute);
 app.use("/orderitems", orderItemRoute);
 app.use("/food", foodRoute);
+app.use("/foodcatergory", foodcatergoryRoute);
+app.use("/feedback", feedbackRoute);
 
 app.listen(PORT, () => {
   console.log("Server is running on Port:", PORT);
