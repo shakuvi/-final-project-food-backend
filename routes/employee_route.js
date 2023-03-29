@@ -32,9 +32,15 @@ employeeRoute.route("/create").post((req, res) => {
     });
 });
 
-//Get all employees
-employeeRoute.route("/get-all").post((req, res) => {
-  Employee.find();
+//View all employees
+employeeRoute.route("/get-all").get((req, res) => {
+  Employee.find()
+    .then((employee) => {
+      res.status(200).send({ status: "sucess", employee });
+    })
+    .catch((e) => {
+      res.status(400).send({ status: "faliure" });
+    });
 });
 
 module.exports = employeeRoute;

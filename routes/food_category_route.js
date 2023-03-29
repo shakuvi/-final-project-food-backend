@@ -20,4 +20,15 @@ foodcatergoryRoute.route("/create").post((req, res) => {
     });
 });
 
+//View all catergory
+foodcatergoryRoute.route("/get-all").get((req, res) => {
+  FoodCatergory.find()
+    .then((foofcatergory) => {
+      res.status(200).send({ status: "sucess", foofcatergory });
+    })
+    .catch((e) => {
+      res.status(200).send({ status: "faliure" });
+    });
+});
+
 module.exports = foodcatergoryRoute;

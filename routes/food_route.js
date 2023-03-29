@@ -22,4 +22,15 @@ foodRoute.route("/create").post((req, res) => {
     });
 });
 
+//View all foods
+foodRoute.route("/get-all").get((req, res) => {
+  Food.find()
+    .then((food) => {
+      res.status(200).send({ status: "sucess", food });
+    })
+    .catch((e) => {
+      res.status(200).send({ status: "faliure" });
+    });
+});
+
 module.exports = foodRoute;
