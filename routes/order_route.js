@@ -36,4 +36,15 @@ orderRoute.route("/create").post((req, res) => {
     });
 });
 
+//View all orders
+orderRoute.route("/get-all").get((req, res) => {
+  Order.find()
+    .then((order) => {
+      res.status(200).send({ status: "sucess", order });
+    })
+    .catch((e) => {
+      res.status(200).send({ status: "faliure" });
+    });
+});
+
 module.exports = orderRoute;

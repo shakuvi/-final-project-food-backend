@@ -21,4 +21,15 @@ orderItemRoute.route("/create").post((req, res) => {
     });
 });
 
+//View all food items
+orderItemRoute.route("/get-all").get((req, res) => {
+  OrderItemWithQuantity.find()
+    .then((orderitemwithquantity) => {
+      res.status(200).send({ status: "sucess", orderitemwithquantity });
+    })
+    .catch((e) => {
+      res.status(200).send({ status: "faliure" });
+    });
+});
+
 module.exports = orderItemRoute;

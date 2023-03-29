@@ -18,4 +18,15 @@ orderTypeRoute.route("/create").post((req, res) => {
     });
 });
 
+//View order types
+orderTypeRoute.route("/get-all").get((req, res) => {
+  OrderType.find()
+    .then((ordertype) => {
+      res.status(200).send({ status: "sucess", ordertype });
+    })
+    .catch((e) => {
+      res.status(200).send({ status: "faliure" });
+    });
+});
+
 module.exports = orderTypeRoute;
