@@ -24,7 +24,7 @@ employeeRoute.route("/create").post((req, res) => {
   });
   employee
     .save()
-    .then((feedback) => {
+    .then((employee) => {
       res.status(200).send({ status: "sucess", employee });
     })
     .catch((e) => {
