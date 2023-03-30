@@ -43,4 +43,26 @@ userRoute.route("/get-all").get((req, res) => {
     });
 });
 
+//User sign-in
+userRoute.route("/sign-in").get((req, res) => {
+  const { email, password } = req.body;
+  User.findOne({ email: email, password: password })
+    .then((user) => {
+      if (user) {
+        res
+          .status(200)
+          .send({
+            status: "login-sucess",
+            userID: user._id,
+            useName: user.userName,
+          });
+      } else {
+        res.status(401).send({ status: "User not found" });
+      }
+    })
+    .catch((e) => {
+      res.status(400).send({ status: "Bad request" });
+    });
+});
+
 module.exports = userRoute;
