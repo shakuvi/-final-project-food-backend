@@ -2,6 +2,7 @@ const express = require("express");
 const { default: mongoose } = require("mongoose");
 const dotenv = require("dotenv").config();
 const cors = require("cors");
+const bodyParser = require("body-parser");
 const userRoute = require("./routes/user_route");
 const tableRoute = require("./routes/table_route");
 const orderTypeRoute = require("./routes/order_type_route");
@@ -23,7 +24,7 @@ db.on("error", (error) => console.log(error));
 db.once("open", () => console.log("Connected to Database Successfully"));
 
 app.use(cors());
-app.use(express.json());
+app.use(bodyParser.json());
 app.use("/user", userRoute);
 app.use("/table", tableRoute);
 app.use("/ordertype", orderTypeRoute);

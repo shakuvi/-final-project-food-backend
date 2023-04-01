@@ -49,13 +49,11 @@ userRoute.route("/sign-in").get((req, res) => {
   User.findOne({ email: email, password: password })
     .then((user) => {
       if (user) {
-        res
-          .status(200)
-          .send({
-            status: "login-sucess",
-            userID: user._id,
-            useName: user.userName,
-          });
+        res.status(200).send({
+          status: "login-sucess",
+          userID: user._id,
+          useName: user.userName,
+        });
       } else {
         res.status(401).send({ status: "User not found" });
       }
