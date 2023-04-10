@@ -3,7 +3,8 @@ const User = require("../models/user_model");
 
 const feedbackSchema = new Schema(
   {
-    feedback: { type: String },
+    feedbackdetils: { type: String },
+    rateValue: { type: Number },
     userID: { type: Schema.Types.ObjectId, ref: "User" },
     orderId: { type: Schema.Types.ObjectId, ref: "Order" },
   },

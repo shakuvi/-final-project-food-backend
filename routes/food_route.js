@@ -25,8 +25,24 @@ foodRoute.route("/create").post((req, res) => {
 //View all foods
 foodRoute.route("/get-all").get((req, res) => {
   Food.find()
-    .then((food) => {
-      res.status(200).send({ status: "sucess", food });
+    .then((foods) => {
+      res.status(200).send({ status: "sucess", foods });
+    })
+    .catch((e) => {
+      res.status(400).send({ status: "faliure" });
+    });
+});
+
+//View all food accoding to catergory ID
+foodRoute.route("/get-food-by-catergory-id").get((req, res) => {
+  const { category } = req.body;
+  Food.find({ category })
+    .then((foods) => {
+      // const foodIds = foods.map((food) => food._id); get food id's only
+      res.status(200).send({
+        status: "Success",
+        foods,
+      });
     })
     .catch((e) => {
       res.status(400).send({ status: "faliure" });

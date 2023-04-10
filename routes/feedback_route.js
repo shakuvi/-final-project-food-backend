@@ -4,9 +4,9 @@ const Feedback = require("../models/feedback_model");
 
 //Add feedback
 feedbackRoute.route("/create").post((req, res) => {
-  const { name, image, description } = req.body;
+  const { feedbackdetils, userID, orderId } = req.body;
   const feedback = new Feedback({
-    feedback,
+    feedbackdetils,
     userID,
     orderId,
   });
