@@ -34,7 +34,7 @@ foodRoute.route("/get-all").get((req, res) => {
 });
 
 //View all food accoding to catergory ID
-foodRoute.route("/get-food-by-catergory-id").get((req, res) => {
+foodRoute.route("/get-food-by-catergory-id").post((req, res) => {
   const { category } = req.body;
   Food.find({ category })
     .then((foods) => {
