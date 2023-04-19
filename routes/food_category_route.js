@@ -31,4 +31,17 @@ foodcatergoryRoute.route("/get-all").get((req, res) => {
     });
 });
 
+//update catergory
+foodcatergoryRoute.route("/update").post((req, res) => {
+  const { catergory } = req.body;
+  console.log(catergory);
+  FoodCatergory.findByIdAndUpdate(catergory._id, catergory)
+    .then((foodcatergory) => {
+      res.status(200).send({ status: "sucess", foodcatergory });
+    })
+    .catch((e) => {
+      res.status(400).send({ status: "faliure" });
+    });
+});
+
 module.exports = foodcatergoryRoute;
