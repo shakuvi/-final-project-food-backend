@@ -39,10 +39,15 @@ orderRoute.route("/create").post((req, res) => {
 //View all orders
 orderRoute.route("/get-all").get((req, res) => {
   Order.find()
+    .populate("orderedBy", "userName")
+    .populate("orderType", "orderType")
+    .populate("table", "tableName")
+    .populate("handleBy", "userName")
     .then((order) => {
       res.status(200).send({ status: "sucess", order });
     })
     .catch((e) => {
+      console.log(e);
       res.status(400).send({ status: "faliure" });
     });
 });
