@@ -4,20 +4,20 @@ const OrderItemWithQuantity = require("../models/order_items_model");
 
 //Order Items with quantity
 orderItemRoute.route("/create").post((req, res) => {
-  const { orderID, food, quanitity, price } = req.body;
+  const { orderID, food, price, quantity } = req.body;
   const orderitemwithquantity = new OrderItemWithQuantity({
     orderID,
     food,
-    quanitity,
     price,
+    quantity,
   });
   orderitemwithquantity
     .save()
     .then((orderitemwithquantity) => {
-      res.status(200).send({ status: "sucess", orderitemwithquantity });
+      res.status(200).send({ status: "success", orderitemwithquantity });
     })
     .catch((e) => {
-      res.status(400).send({ status: "faliure" });
+      res.status(400).send({ status: "failure" });
     });
 });
 

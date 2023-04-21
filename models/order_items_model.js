@@ -6,8 +6,8 @@ const orderItemsSchema = new Schema(
   {
     orderID: { type: Schema.Types.ObjectId, ref: "Order" },
     food: { type: Schema.Types.ObjectId, ref: "Food" },
-    quanitity: { type: Number },
     price: { type: Number },
+    quantity: { type: Number },
   },
   { collection: "orderItemWithQuantities" }
 );
