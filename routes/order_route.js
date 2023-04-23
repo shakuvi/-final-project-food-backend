@@ -52,4 +52,16 @@ orderRoute.route("/get-all").get((req, res) => {
     });
 });
 
+//update orderStatus
+orderRoute.route("/update").post((req, res) => {
+  const { id, status } = req.body;
+  Order.findByIdAndUpdate(id, { status: status }, { new: true })
+    .then((order) => {
+      res.status(200).send({ status: "sucess", order });
+    })
+    .catch((e) => {
+      res.status(400).send({ status: "faliure" });
+    });
+});
+
 module.exports = orderRoute;

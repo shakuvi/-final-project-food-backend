@@ -22,8 +22,10 @@ orderItemRoute.route("/create").post((req, res) => {
 });
 
 //View all food items
-orderItemRoute.route("/get-all").get((req, res) => {
-  OrderItemWithQuantity.find()
+orderItemRoute.route("/get-all-by-order-id").post((req, res) => {
+  const { orderId } = req.body;
+  OrderItemWithQuantity.find({ orderID: orderId })
+    .populate("food")
     .then((orderitemwithquantity) => {
       res.status(200).send({ status: "sucess", orderitemwithquantity });
     })
