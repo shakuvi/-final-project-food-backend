@@ -7,6 +7,7 @@ const feedbackSchema = new Schema(
     rateValue: { type: Number },
     userID: { type: Schema.Types.ObjectId, ref: "User" },
     orderId: { type: Schema.Types.ObjectId, ref: "Order" },
+    sentiment: { type: String },
   },
   { collection: "feedbacks" }
 );
