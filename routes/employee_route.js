@@ -43,6 +43,20 @@ employeeRoute.route("/get-all").get((req, res) => {
     });
 });
 
+//update employee
+employeeRoute.route("/update").post((req, res) => {
+  const { employee } = req.body;
+  console.log(employee);
+  Employee.findByIdAndUpdate(employee._id, employee)
+    .then((employee) => {
+      res.status(200).send({ status: "sucess", employee });
+    })
+    .catch((e) => {
+      console.log(e);
+      res.status(400).send({ status: "faliure" });
+    });
+});
+
 //employee sign-in
 employeeRoute.route("/sign-in").get((req, res) => {
   const { email, password } = req.body;
