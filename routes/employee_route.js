@@ -4,25 +4,12 @@ const Employee = require("../models/employee_model");
 
 //Add feedback
 employeeRoute.route("/create").post((req, res) => {
-  const {
-    firstName,
-    lastName,
-    userName,
-    email,
-    dateOfBirth,
-    mobileNumber,
-    password,
-  } = req.body;
-  const employee = new Employee({
-    firstName,
-    lastName,
-    userName,
-    email,
-    dateOfBirth,
-    mobileNumber,
-    password,
-  });
-  employee
+  console.log(req.body);
+  const { employee } = req.body;
+
+  const newEmployee = new Employee({ ...employee });
+
+  newEmployee
     .save()
     .then((employee) => {
       res.status(200).send({ status: "sucess", employee });
