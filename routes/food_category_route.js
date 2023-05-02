@@ -4,16 +4,13 @@ const FoodCatergory = require("../models/food_category_model");
 
 //Add catergory
 foodcatergoryRoute.route("/create").post((req, res) => {
-  const { name, image, description } = req.body;
-  const foofcatergory = new FoodCatergory({
-    name,
-    image,
-    description,
-  });
-  foofcatergory
+  const { catergory } = req.body;
+  console.log(catergory);
+  const newCatergory = new FoodCatergory({ ...catergory });
+  newCatergory
     .save()
-    .then((foofcatergory) => {
-      res.status(200).send({ status: "sucess", foofcatergory });
+    .then((foodcatergory) => {
+      res.status(200).send({ status: "sucess", foodcatergory });
     })
     .catch((e) => {
       res.status(400).send({ status: "faliure" });
