@@ -70,9 +70,11 @@ employeeRoute.route("/sign-in").post((req, res) => {
           );
           res.status(200).send({
             status: "login-sucess",
-            userName: employee.userName,
-            employeeType: employee.employeeType.employeeType,
             token,
+            employee: {
+              userName: employee.userName,
+              employeeType: employee.employeeType.employeeType,
+            },
           });
         } else {
           res.status(404).send({ status: "password-incorrect" });
