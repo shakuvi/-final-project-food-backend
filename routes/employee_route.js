@@ -1,22 +1,28 @@
 const express = require("express");
 const employeeRoute = express.Router();
 const Employee = require("../models/employee_model");
+const { verifyToken } = require("../middlewares/authMiddleware");
+const jwt = require("jsonwebtoken");
 
 //Add feedback
-employeeRoute.route("/create").post((req, res) => {
-  console.log(req.body);
+employeeRoute.route("/create").post(verifyToken, (req, res) => {
+  console.log(req.user);
   const { employee } = req.body;
+  const { employeeType } = req.user;
 
-  const newEmployee = new Employee({ ...employee });
-
-  newEmployee
-    .save()
-    .then((employee) => {
-      res.status(200).send({ status: "sucess", employee });
-    })
-    .catch((e) => {
-      res.status(400).send({ status: "faliure" });
-    });
+  if (employeeType === "owner") {
+    const newEmployee = new Employee({ ...employee });
+    newEmployee
+      .save()
+      .then((employee) => {
+        res.status(200).send({ status: "sucess", employee });
+      })
+      .catch((e) => {
+        res.status(400).send({ status: "faliure" });
+      });
+  } else {
+    res.status(403).send({ status: "Unautorized" });
+  }
 });
 
 //View all employees
@@ -45,21 +51,38 @@ employeeRoute.route("/update").post((req, res) => {
 });
 
 //employee sign-in
-employeeRoute.route("/sign-in").get((req, res) => {
+employeeRoute.route("/sign-in").post((req, res) => {
   const { email, password } = req.body;
-  Employee.findOne({ email: email, password: password })
+  console.log(email, password);
+  Employee.findOne({ email: email })
+    .populate("employeeType")
     .then((employee) => {
       if (employee) {
-        res.status(200).send({
-          status: "login-sucess",
-          userID: employee._id,
-          useName: employee.userName,
-        });
+        console.log(employee);
+        if (employee.password === password) {
+          console.log(employee.employeeType.employeeType);
+          const token = jwt.sign(
+            {
+              id: employee._id,
+              employeeType: employee.employeeType.employeeType,
+            },
+            process.env.SECRETKEY
+          );
+          res.status(200).send({
+            status: "login-sucess",
+            userName: employee.userName,
+            employeeType: employee.employeeType.employeeType,
+            token,
+          });
+        } else {
+          res.status(404).send({ status: "password-incorrect" });
+        }
       } else {
-        res.status(401).send({ status: "User not found" });
+        res.status(403).send({ status: "User not found" });
       }
     })
     .catch((e) => {
+      console.log(e);
       res.status(400).send({ status: "Bad request" });
     });
 });

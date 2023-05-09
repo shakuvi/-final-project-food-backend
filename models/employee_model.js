@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const employeeType = require("./employee_type_model");
 
 const employeeSchema = new Schema(
   {
@@ -9,6 +10,7 @@ const employeeSchema = new Schema(
     dateOfBirth: { type: String },
     mobileNumber: { type: String },
     password: { type: String },
+    employeeType: { type: Schema.Types.ObjectId, ref: "employeeType" },
   },
   { collection: "employees" }
 );
