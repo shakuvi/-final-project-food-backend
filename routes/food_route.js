@@ -1,25 +1,34 @@
 const express = require("express");
 const foodRoute = express.Router();
 const Food = require("../models/food_model");
+const { verifyToken } = require("../middlewares/authMiddleware");
+const jwt = require("jsonwebtoken");
 
 //Order Items with quantity
-foodRoute.route("/create").post((req, res) => {
+foodRoute.route("/create").post(verifyToken, (req, res) => {
   const { name, price, description, image, category } = req.body;
-  const food = new Food({
-    name,
-    price,
-    description,
-    image,
-    category,
-  });
-  food
-    .save()
-    .then((food) => {
-      res.status(200).send({ status: "sucess", food });
-    })
-    .catch((e) => {
-      res.status(400).send({ status: "faliure" });
+  console.log(req.user);
+  const { employeeType } = req.user;
+
+  if (employeeType === "owner") {
+    const food = new Food({
+      name,
+      price,
+      description,
+      image,
+      category,
     });
+    food
+      .save()
+      .then((food) => {
+        res.status(200).send({ status: "sucess", food });
+      })
+      .catch((e) => {
+        res.status(400).send({ status: "faliure" });
+      });
+  } else {
+    res.status(403).send({ status: "Unautorized" });
+  }
 });
 
 //View all foods
@@ -51,16 +60,23 @@ foodRoute.route("/get-food-by-catergory-id").post((req, res) => {
 });
 
 //update food
-foodRoute.route("/update").post((req, res) => {
+foodRoute.route("/update").post(verifyToken, (req, res) => {
   const { food } = req.body;
-  console.log(food);
-  Food.findByIdAndUpdate(food._id, food)
-    .then((food) => {
-      res.status(200).send({ status: "sucess", food });
-    })
-    .catch((e) => {
-      res.status(400).send({ status: "faliure" });
-    });
+  console.log(req.user);
+  const { employeeType } = req.user;
+
+  if (employeeType === "owner") {
+    console.log(food);
+    Food.findByIdAndUpdate(food._id, food)
+      .then((food) => {
+        res.status(200).send({ status: "sucess", food });
+      })
+      .catch((e) => {
+        res.status(400).send({ status: "faliure" });
+      });
+  } else {
+    res.status(403).send({ status: "Unautorized" });
+  }
 });
 
 module.exports = foodRoute;
