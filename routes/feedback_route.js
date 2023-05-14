@@ -6,11 +6,11 @@ const jwt = require("jsonwebtoken");
 
 //Add feedback
 feedbackRoute.route("/create").post((req, res) => {
-  const { feedbackdetils, rateValue, userID, orderId, sentiment } = req.body;
+  const { feedbackdetils, rateValue, userId, orderId, sentiment } = req.body;
   const feedback = new Feedback({
     feedbackdetils,
     rateValue,
-    userID,
+    userId,
     orderId,
     sentiment,
   });
@@ -31,7 +31,7 @@ feedbackRoute.route("/get-all").get(verifyToken, (req, res) => {
 
   if (employeeType === "owner" || employeeType === "kitchen") {
     Feedback.find()
-      .populate("userID")
+      .populate("userId")
       .populate("orderId")
       .then((feedback) => {
         res.status(200).send({ status: "sucess", feedback });
