@@ -25,23 +25,16 @@ feedbackRoute.route("/create").post((req, res) => {
 });
 
 //View all feedbacks
-feedbackRoute.route("/get-all").get(verifyToken, (req, res) => {
-  console.log(req.user);
-  const { employeeType } = req.user;
-
-  if (employeeType === "owner" || employeeType === "kitchen") {
-    Feedback.find()
-      .populate("userId")
-      .populate("orderId")
-      .then((feedback) => {
-        res.status(200).send({ status: "sucess", feedback });
-      })
-      .catch((e) => {
-        res.status(400).send({ status: "faliure" });
-      });
-  } else {
-    res.status(403).send({ status: "Unautorized" });
-  }
+feedbackRoute.route("/get-all").get((req, res) => {
+  Feedback.find()
+    .populate("userId")
+    .populate("orderId")
+    .then((feedback) => {
+      res.status(200).send({ status: "sucess", feedback });
+    })
+    .catch((e) => {
+      res.status(400).send({ status: "faliure" });
+    });
 });
 
 module.exports = feedbackRoute;
