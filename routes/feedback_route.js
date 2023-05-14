@@ -1,18 +1,21 @@
 const express = require("express");
 const feedbackRoute = express.Router();
 const Feedback = require("../models/feedback_model");
-const { verifyToken } = require("../middlewares/authMiddleware");
-const jwt = require("jsonwebtoken");
 
 //Add feedback
 feedbackRoute.route("/create").post((req, res) => {
-  const { feedbackdetils, rateValue, userId, orderId, sentiment } = req.body;
+  const { review } = req.body;
+  const {
+    rating: rateValue,
+    reviewText: feedbackdetils,
+    userId,
+    orderId,
+  } = review;
   const feedback = new Feedback({
     feedbackdetils,
     rateValue,
     userId,
     orderId,
-    sentiment,
   });
   feedback
     .save()

@@ -1,22 +1,13 @@
-const express = require("express");
+const express = require('express');
 const orderRoute = express.Router();
-const Order = require("../models/order_model");
-const OrderItemWithQuantity = require("../models/order_items_model");
+const Order = require('../models/order_model');
+const OrderItemWithQuantity = require('../models/order_items_model');
+const Feedback = require('../models/feedback_model');
 
 //Create food order
-orderRoute.route("/create").post((req, res) => {
-  const {
-    createDate,
-    createTime,
-    status,
-    orderedBy,
-    billValue,
-    discount,
-    orderType,
-    table,
-    handleBy,
-    orderItems,
-  } = req.body;
+orderRoute.route('/create').post((req, res) => {
+  const { createDate, createTime, status, orderedBy, billValue, discount, orderType, table, handleBy, orderItems } =
+    req.body;
   const order = new Order({
     createDate,
     createTime,
@@ -30,64 +21,66 @@ orderRoute.route("/create").post((req, res) => {
   });
   order
     .save()
-    .then((order) => {
+    .then(order => {
       // after creating the order we need to save each of the items
 
-      res.status(200).send({ status: "sucess", order });
+      res.status(200).send({ status: 'sucess', order });
     })
-    .catch((e) => {
+    .catch(e => {
       res.status(400).send({ status: e });
     });
 });
 
 //View all orders
-orderRoute.route("/get-all").get((req, res) => {
+orderRoute.route('/get-all').get((req, res) => {
   Order.find()
-    .populate("orderedBy", "userName")
-    .populate("orderType", "orderType")
-    .populate("table", "tableName")
-    .populate("handleBy", "userName")
-    .then((order) => {
-      res.status(200).send({ status: "sucess", order });
+    .populate('orderedBy', 'userName')
+    .populate('orderType', 'orderType')
+    .populate('table', 'tableName')
+    .populate('handleBy', 'userName')
+    .then(order => {
+      res.status(200).send({ status: 'sucess', order });
     })
-    .catch((e) => {
-      console.log(e);
-      res.status(400).send({ status: "faliure" });
+    .catch(e => {
+      res.status(400).send({ status: 'faliure' });
     });
 });
 
 // get orders by id
-orderRoute.route("/get-all-by-user-id").get(async (req, res) => {
+orderRoute.route('/get-all-by-user-id').get(async (req, res) => {
   const { userId } = req.query;
   const { status: searchString } = req.query;
-  console.log(searchString);
+
   const statusFilter =
-    searchString?.toLocaleLowerCase() == "pending"
-      ? { status: { $nin: ["Completed", "completed"] } }
+    searchString && searchString.toLocaleLowerCase() == 'pending'
+      ? { status: { $nin: ['Completed', 'completed'] } }
       : {};
 
   try {
     const order = await Order.find({ orderedBy: userId, ...statusFilter })
-      .populate("orderType", "orderType")
-      .populate("table", "tableName")
-      .populate("handleBy", "userName");
+      .populate('orderType', 'orderType')
+      .populate('table', 'tableName')
+      .populate('handleBy', 'userName');
 
     const modifyResponse = await Promise.all(
-      order.map(async (orderInfomation) => {
+      order.map(async orderInfomation => {
         const items = await OrderItemWithQuantity.find({
           orderID: orderInfomation._id,
-        }).populate("food");
+        }).populate('food');
+
+        const review = await Feedback.findOne({ orderId: orderInfomation._id });
+
         return {
           order: orderInfomation,
           items,
+          review,
         };
-      })
+      }),
     );
 
-    res.status(200).send({ status: "success", orders: modifyResponse });
+    res.status(200).send({ status: 'success', orders: modifyResponse });
   } catch (e) {
-    console.log(e);
-    res.status(400).send({ status: "failure" });
+    res.status(400).send({ status: 'failure' });
   }
 });
 
@@ -121,22 +114,22 @@ orderRoute.route("/get-all-by-user-id").get(async (req, res) => {
 // });
 
 //update orderStatus
-orderRoute.route("/update").post((req, res) => {
+orderRoute.route('/update').post((req, res) => {
   const { id, status } = req.body;
   Order.findByIdAndUpdate(id, { status: status }, { new: true })
-    .then((order) => {
-      res.status(200).send({ status: "sucess", order });
+    .then(order => {
+      res.status(200).send({ status: 'sucess', order });
     })
-    .catch((e) => {
-      res.status(400).send({ status: "faliure" });
+    .catch(e => {
+      res.status(400).send({ status: 'faliure' });
     });
 });
 
-orderRoute.route("/create-order-with-item").post((req, res) => {
+orderRoute.route('/create-order-with-item').post((req, res) => {
   const { orderRequestData } = req.body;
   const requestObj = JSON.parse(orderRequestData);
   const { createDate, createTime, orderBy, orderInfo, billValue } = requestObj;
-  const { tableNo, orderType, itemList } = orderInfo;
+  const { tableNo, orderType, itemList, pickupTime } = orderInfo;
 
   let newOrder = new Order();
   newOrder.orderType = orderType;
@@ -145,12 +138,13 @@ orderRoute.route("/create-order-with-item").post((req, res) => {
   newOrder.createTime = createTime;
   newOrder.orderedBy = orderBy;
   newOrder.billValue = billValue;
-  newOrder.status = "pending";
+  newOrder.status = 'pending';
+  newOrder.pickUpTime = pickupTime;
 
   newOrder
     .save()
-    .then((order) => {
-      itemList.forEach(async (item) => {
+    .then(order => {
+      itemList.forEach(async item => {
         const orderItem = new OrderItemWithQuantity();
         orderItem.orderID = order._id;
         const { food, qty } = item;
@@ -158,13 +152,12 @@ orderRoute.route("/create-order-with-item").post((req, res) => {
         orderItem.food = foodId;
         orderItem.price = price;
         orderItem.quantity = qty;
-        console.log(orderItem);
         await orderItem.save();
       });
-      res.status(200).send({ status: "sucess", newOrder });
+      res.status(200).send({ status: 'sucess', newOrder });
     })
     .catch(() => {
-      res.status(400).send({ status: "faliure" });
+      res.status(400).send({ status: 'faliure' });
     });
 });
 

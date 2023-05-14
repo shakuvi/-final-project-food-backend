@@ -41,7 +41,6 @@ recommendationRoute.route("/get-all").post((req, res) => {
         });
     })
     .catch((e) => {
-      console.log(e);
       res.status(400).send({ status: "faliure-ml" });
     });
 });

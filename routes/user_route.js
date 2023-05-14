@@ -1,6 +1,7 @@
 const express = require("express");
 const userRoute = express.Router();
 const User = require("../models/user_model");
+const _ = require("lodash");
 
 //Save Users to database
 userRoute.route("/create").post((req, res) => {
@@ -12,7 +13,8 @@ userRoute.route("/create").post((req, res) => {
     dateOfBirth,
     mobileNumber,
     password,
-  } = req.body;
+  } = JSON.parse(req.body.user);
+  console.log(req.body.user);
   const user = new User({
     firstName,
     lastName,
@@ -44,22 +46,37 @@ userRoute.route("/get-all").get((req, res) => {
 });
 
 //User sign-in
-userRoute.route("/sign-in").get((req, res) => {
+userRoute.route("/sign-in").post((req, res) => {
   const { email, password } = req.body;
   User.findOne({ email: email, password: password })
     .then((user) => {
       if (user) {
+        const { firstName, lastName, _id, email, mobileNumber, dateOfBirth } =
+          user;
+        const sendUser = {
+          firstName,
+          lastName,
+          _id,
+          email,
+          mobileNumber,
+          dateOfBirth,
+        };
+
         res.status(200).send({
           status: "login-sucess",
-          userID: user._id,
-          useName: user.userName,
+          user: sendUser,
         });
       } else {
-        res.status(401).send({ status: "User not found" });
+        res
+          .status(401)
+          .send({ status: "User not found", errorMsg: "User not found" });
       }
     })
     .catch((e) => {
-      res.status(400).send({ status: "Bad request" });
+      res.status(400).send({
+        status: "Bad request",
+        errorMsg: "Username or password incorrect",
+      });
     });
 });
 
