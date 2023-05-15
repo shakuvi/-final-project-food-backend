@@ -8,6 +8,7 @@ const jwt = require("jsonwebtoken");
 employeeRoute.route("/create").post(verifyToken, (req, res) => {
   console.log(req.user);
   const { employee } = req.body;
+  console.log(employee);
   const { employeeType } = req.user;
 
   if (employeeType === "owner") {
@@ -18,6 +19,7 @@ employeeRoute.route("/create").post(verifyToken, (req, res) => {
         res.status(200).send({ status: "sucess", employee });
       })
       .catch((e) => {
+        console.log(e);
         res.status(400).send({ status: "faliure" });
       });
   } else {
