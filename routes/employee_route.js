@@ -31,6 +31,7 @@ employeeRoute.route("/get-all").get(verifyToken, (req, res) => {
   const { employeeType } = req.user;
   if (employeeType === "owner") {
     Employee.find()
+      .populate("employeeType")
       .then((employee) => {
         res.status(200).send({ status: "sucess", employee });
       })

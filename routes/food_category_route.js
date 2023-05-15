@@ -28,8 +28,6 @@ foodcatergoryRoute.route("/create").post(verifyToken, (req, res) => {
 
 //View all catergory
 foodcatergoryRoute.route("/get-all").get((req, res) => {
-  console.log(req.user);
-
   FoodCatergory.find()
     .then((foodcatergory) => {
       res.status(200).send({ status: "sucess", foodcatergory });
