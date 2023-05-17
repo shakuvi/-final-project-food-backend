@@ -4,6 +4,91 @@ const recommendationRoute = express.Router();
 const Food = require("../models/food_model");
 const FoodCatergory = require("../models/food_category_model");
 
+/**
+ * @swagger
+ * tags:
+ *   name: Recommendation
+ *   description: API endpoints for retrieving food recommendations
+ */
+
+/**
+ * @swagger
+ * /recommendation/get-all:
+ *   post:
+ *     summary: Get food recommendations for a user
+ *     tags: [Recommendation]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/RecommendationRequest'
+ *     responses:
+ *       200:
+ *         description: Successful operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/RecommendationResponse'
+ *       400:
+ *         description: Failed operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     RecommendationRequest:
+ *       type: object
+ *       properties:
+ *         userId:
+ *           type: string
+ *     RecommendationResponse:
+ *       type: object
+ *       properties:
+ *         foods:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/Food'
+ *         categories:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/FoodCategory'
+ *     Food:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *         name:
+ *           type: string
+ *         price:
+ *           type: number
+ *         description:
+ *           type: string
+ *         image:
+ *           type: string
+ *         category:
+ *           $ref: '#/components/schemas/FoodCategory'
+ *     FoodCategory:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *         name:
+ *           type: string
+ *     Error:
+ *       type: object
+ *       properties:
+ *         status:
+ *           type: string
+ *         errorMsg:
+ *           type: string
+ */
+
 recommendationRoute.route("/get-all").post((req, res) => {
   const { userId } = req.body;
 

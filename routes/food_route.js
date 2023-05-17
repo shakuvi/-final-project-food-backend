@@ -4,6 +4,193 @@ const Food = require("../models/food_model");
 const { verifyToken } = require("../middlewares/authMiddleware");
 const jwt = require("jsonwebtoken");
 
+/**
+ * @swagger
+ * tags:
+ *   name: Food
+ *   description: API endpoints for managing food items
+ */
+
+/**
+ * @swagger
+ * /food/create:
+ *   post:
+ *     summary: Create a new food item
+ *     tags: [Food]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/FoodRequest'
+ *     responses:
+ *       200:
+ *         description: Successful operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/FoodResponse'
+ *       400:
+ *         description: Failure operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       403:
+ *         description: Unauthorized access
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+
+/**
+ * @swagger
+ * /food/get-all:
+ *   get:
+ *     summary: Get all food items
+ *     tags: [Food]
+ *     responses:
+ *       200:
+ *         description: Successful operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/FoodListResponse'
+ *       400:
+ *         description: Failure operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+
+/**
+ * @swagger
+ * /food/get-food-by-category-id:
+ *   post:
+ *     summary: Get food items by category ID
+ *     tags: [Food]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/FoodByCategoryRequest'
+ *     responses:
+ *       200:
+ *         description: Successful operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/FoodListResponse'
+ *       400:
+ *         description: Failure operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+
+/**
+ * @swagger
+ * /food/update:
+ *   post:
+ *     summary: Update a food item
+ *     tags: [Food]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/FoodRequest'
+ *     responses:
+ *       200:
+ *         description: Successful operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/FoodResponse'
+ *       400:
+ *         description: Failure operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       403:
+ *         description: Unauthorized access
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     FoodRequest:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *         price:
+ *           type: number
+ *         description:
+ *           type: string
+ *         image:
+ *           type: string
+ *         category:
+ *           type: string
+ *     FoodResponse:
+ *       type: object
+ *       properties:
+ *         status:
+ *           type: string
+ *         food:
+ *           $ref: '#/components/schemas/Food'
+ *     FoodListResponse:
+ *       type: object
+ *       properties:
+ *         status:
+ *           type: string
+ *         foods:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/Food'
+ *     FoodByCategoryRequest:
+ *       type: object
+ *       properties:
+ *         category:
+ *           type: string
+ *     Food:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *         name:
+ *           type: string
+ *         price:
+ *           type: number
+ *         description:
+ *           type: string
+ *         image:
+ *           type: string
+ *         category:
+ *           type: string
+ *     Error:
+ *       type: object
+ *       properties:
+ *         status:
+ *           type: string
+ */
+
+module.exports = foodRoute;
+
 //Order Items with quantity
 foodRoute.route("/create").post(verifyToken, (req, res) => {
   const { name, price, description, image, category } = req.body;

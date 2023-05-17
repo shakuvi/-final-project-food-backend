@@ -16,6 +16,28 @@ const recommendationRoute = require("./routes/recomandation_route");
 const homeCarosalRoute = require("./routes/home_carosal_route");
 const employeeTypeRoute = require("./routes/employee_type_route");
 const imegeUploadRoute = require("./routes/image_upload_route");
+const swaggerJSDoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
+
+// Swagger options
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Food-Backend",
+      version: "1.0.0",
+      description: "API documentation for your project",
+    },
+    servers: [
+      {
+        url: "http://localhost:5000", // Update with your server URL
+      },
+    ],
+  },
+  apis: ["./routes/*.js"], // Path to your route files
+};
+
+const swaggerSpec = swaggerJSDoc(swaggerOptions);
 
 const app = express();
 const PORT = 5000;
@@ -42,6 +64,7 @@ app.use("/recommendation", recommendationRoute);
 app.use("/homecarosal", homeCarosalRoute);
 app.use("/emptype", employeeTypeRoute);
 app.use("/imgupload", imegeUploadRoute);
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.listen(PORT, () => {
   console.log("Server is running on Port:", PORT);

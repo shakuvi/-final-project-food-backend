@@ -2,6 +2,127 @@ const express = require("express");
 const feedbackRoute = express.Router();
 const Feedback = require("../models/feedback_model");
 
+/**
+ * @swagger
+ * tags:
+ *   name: Feedback
+ *   description: API endpoints for managing feedback
+ */
+
+/**
+ * @swagger
+ * /feedback/create:
+ *   post:
+ *     summary: Add feedback
+ *     tags: [Feedback]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/FeedbackCreateRequest'
+ *     responses:
+ *       200:
+ *         description: Successful operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/FeedbackResponse'
+ *       400:
+ *         description: Failed operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+
+/**
+ * @swagger
+ * /feedback/get-all:
+ *   get:
+ *     summary: Get all feedbacks
+ *     tags: [Feedback]
+ *     responses:
+ *       200:
+ *         description: Successful operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/FeedbackListResponse'
+ *       400:
+ *         description: Failed operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     FeedbackCreateRequest:
+ *       type: object
+ *       properties:
+ *         review:
+ *           type: object
+ *           properties:
+ *             rating:
+ *               type: number
+ *             reviewText:
+ *               type: string
+ *             userId:
+ *               type: string
+ *             orderId:
+ *               type: string
+ *       required:
+ *         - review
+ *     FeedbackResponse:
+ *       type: object
+ *       properties:
+ *         status:
+ *           type: string
+ *         feedback:
+ *           $ref: '#/components/schemas/Feedback'
+ *     FeedbackListResponse:
+ *       type: object
+ *       properties:
+ *         status:
+ *           type: string
+ *         feedback:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/Feedback'
+ *     Feedback:
+ *       type: object
+ *       properties:
+ *         feedbackdetils:
+ *           type: string
+ *         rateValue:
+ *           type: number
+ *         userId:
+ *           $ref: '#/components/schemas/User'
+ *         orderId:
+ *           $ref: '#/components/schemas/Order'
+ *     User:
+ *       type: object
+ *       properties:
+ *         // Specify the properties of the user object here
+ *     Order:
+ *       type: object
+ *       properties:
+ *         // Specify the properties of the order object here
+ *     Error:
+ *       type: object
+ *       properties:
+ *         status:
+ *           type: string
+ */
+
+// ...existing code...
+
+module.exports = feedbackRoute;
+
 //Add feedback
 feedbackRoute.route("/create").post((req, res) => {
   const { review } = req.body;
