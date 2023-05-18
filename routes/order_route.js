@@ -109,6 +109,83 @@ const Feedback = require("../models/feedback_model");
  *               $ref: '#/components/schemas/Error'
  */
 
+/**
+ * @swagger
+ * /order/update:
+ *   post:
+ *     summary: Update order status
+ *     tags: [Order]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 description: ID of the order to update
+ *               status:
+ *                 type: string
+ *                 description: New status for the order
+ *     responses:
+ *       200:
+ *         description: Successful operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 order:
+ *                   $ref: '#/components/schemas/Order'
+ *       400:
+ *         description: Failed operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+
+/**
+ * @swagger
+ * /order/create-order-with-item:
+ *   post:
+ *     summary: Create order with items
+ *     tags: [Order]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               orderRequestData:
+ *                 type: string
+ *                 description: JSON string containing order request data
+ *     responses:
+ *       200:
+ *         description: Successful operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 newOrder:
+ *                   $ref: '#/components/schemas/Order'
+ *       400:
+ *         description: Failed operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+
 //Create food order
 orderRoute.route("/create").post((req, res) => {
   const {
@@ -227,83 +304,6 @@ orderRoute.route("/get-all-by-user-id").get(async (req, res) => {
 //       res.status(400).send({ status: 'faliure' });
 //     });
 // });
-
-/**
- * @swagger
- * /order/update:
- *   post:
- *     summary: Update order status
- *     tags: [Order]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               id:
- *                 type: string
- *                 description: ID of the order to update
- *               status:
- *                 type: string
- *                 description: New status for the order
- *     responses:
- *       200:
- *         description: Successful operation
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   example: success
- *                 order:
- *                   $ref: '#/components/schemas/Order'
- *       400:
- *         description: Failed operation
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- */
-
-/**
- * @swagger
- * /order/create-order-with-item:
- *   post:
- *     summary: Create order with items
- *     tags: [Order]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               orderRequestData:
- *                 type: string
- *                 description: JSON string containing order request data
- *     responses:
- *       200:
- *         description: Successful operation
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   example: success
- *                 newOrder:
- *                   $ref: '#/components/schemas/Order'
- *       400:
- *         description: Failed operation
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- */
 
 //update orderStatus
 orderRoute.route("/update").post((req, res) => {
