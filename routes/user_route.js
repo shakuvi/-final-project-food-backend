@@ -78,7 +78,7 @@ const _ = require("lodash");
  *             schema:
  *               $ref: '#/components/schemas/UserSignInResponse'
  *       401:
- *         description: User not found
+ *         description: User not found or invalid credentials
  *         content:
  *           application/json:
  *             schema:
@@ -169,7 +169,7 @@ const _ = require("lodash");
  *           type: string
  */
 
-//Save Users to database
+// Save Users to database
 userRoute.route("/create").post((req, res) => {
   const {
     firstName,
@@ -180,7 +180,7 @@ userRoute.route("/create").post((req, res) => {
     mobileNumber,
     password,
   } = JSON.parse(req.body.user);
-  console.log(req.body.user);
+
   const user = new User({
     firstName,
     lastName,
@@ -190,65 +190,32 @@ userRoute.route("/create").post((req, res) => {
     mobileNumber,
     password,
   });
+
   user
     .save()
     .then((user) => {
-      res.status(200).send({ status: "sucess", user });
+      res.status(200).send({ status: "success", user });
     })
     .catch((e) => {
-      res.status(200).send({ status: "faliure" });
+      res.status(400).send({ status: "failure" });
     });
 });
 
-//View all users
+// View all users
 userRoute.route("/get-all").get((req, res) => {
   User.find()
-    .then((user) => {
-      res.status(200).send({ status: "sucess", user });
+    .then((users) => {
+      res.status(200).send({ status: "success", users });
     })
     .catch((e) => {
-      res.status(400).send({ status: "faliure" });
+      res.status(400).send({ status: "failure" });
     });
 });
-
-// User sign-in
-// userRoute.route("/sign-in").post((req, res) => {
-//   const { email, password } = req.body;
-//   User.findOne({ email: email, password: password })
-//     .then((user) => {
-//       if (user) {
-//         const { firstName, lastName, _id, email, mobileNumber, dateOfBirth } =
-//           user;
-//         const sendUser = {
-//           firstName,
-//           lastName,
-//           _id,
-//           email,
-//           mobileNumber,
-//           dateOfBirth,
-//         };
-
-//         res.status(200).send({
-//           status: "login-sucess",
-//           user: sendUser,
-//         });
-//       } else {
-//         res
-//           .status(401)
-//           .send({ status: "User not found", errorMsg: "User not found" });
-//       }
-//     })
-//     .catch((e) => {
-//       res.status(400).send({
-//         status: "Bad request",
-//         errorMsg: "Username or password incorrect",
-//       });
-//     });
-// });
 
 // User sign-in
 userRoute.route("/sign-in").post((req, res) => {
   const { email, password } = req.body;
+
   User.findOne({ email: email })
     .then((user) => {
       if (user) {
@@ -278,7 +245,7 @@ userRoute.route("/sign-in").post((req, res) => {
               };
 
               res.status(200).send({
-                status: "login-success",
+                status: "success",
                 user: sendUser,
               });
             } else {
@@ -289,14 +256,16 @@ userRoute.route("/sign-in").post((req, res) => {
             }
           })
           .catch((e) => {
-            res
-              .status(500)
-              .send({ status: "Internal server error", errorMsg: "Error" });
+            res.status(500).send({
+              status: "Internal server error",
+              errorMsg: "Error",
+            });
           });
       } else {
-        res
-          .status(401)
-          .send({ status: "User not found", errorMsg: "User not found" });
+        res.status(401).send({
+          status: "User not found",
+          errorMsg: "User not found",
+        });
       }
     })
     .catch((e) => {

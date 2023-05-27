@@ -143,12 +143,9 @@ const jwt = require("jsonwebtoken");
  *   schemas:
  *     EmployeeInput:
  *       type: object
- *
  *       properties:
  *         employee:
- *           type: object
- *           properties:
- *             // Specify the properties of the employee object here
+ *           $ref: '#/components/schemas/Employee'
  *       required:
  *         - employee
  *     EmployeeResponse:
@@ -161,7 +158,23 @@ const jwt = require("jsonwebtoken");
  *     Employee:
  *       type: object
  *       properties:
- *         // Specify the properties of the employee object here
+ *         firstName:
+ *           type: string
+ *         lastName:
+ *           type: string
+ *         userName:
+ *           type: string
+ *         email:
+ *           type: string
+ *         dateOfBirth:
+ *           type: string
+ *           format: date
+ *         mobileNumber:
+ *           type: string
+ *         password:
+ *           type: string
+ *         employeeType:
+ *           type: string
  *     SignInInput:
  *       type: object
  *       properties:
@@ -193,7 +206,7 @@ const jwt = require("jsonwebtoken");
  *           type: string
  */
 
-//Add feedback
+// Add feedback
 employeeRoute.route("/create").post(verifyToken, (req, res) => {
   console.log(req.user);
   const { employee } = req.body;
@@ -204,35 +217,35 @@ employeeRoute.route("/create").post(verifyToken, (req, res) => {
     newEmployee
       .save()
       .then((employee) => {
-        res.status(200).send({ status: "sucess", employee });
+        res.status(200).send({ status: "success", employee });
       })
       .catch((e) => {
         console.log(e);
-        res.status(400).send({ status: "faliure" });
+        res.status(400).send({ status: "failure" });
       });
   } else {
-    res.status(403).send({ status: "Unautorized" });
+    res.status(403).send({ status: "Unauthorized" });
   }
 });
 
-//View all employees
+// View all employees
 employeeRoute.route("/get-all").get(verifyToken, (req, res) => {
   console.log(req.user);
   const { employeeType } = req.user;
   if (employeeType === "owner") {
     Employee.find()
-      .then((employee) => {
-        res.status(200).send({ status: "sucess", employee });
+      .then((employees) => {
+        res.status(200).send({ status: "success", employees });
       })
       .catch((e) => {
-        res.status(400).send({ status: "faliure" });
+        res.status(400).send({ status: "failure" });
       });
   } else {
-    res.status(403).send({ status: "Unautorized" });
+    res.status(403).send({ status: "Unauthorized" });
   }
 });
 
-//update employee
+// Update employee
 employeeRoute.route("/update").post(verifyToken, (req, res) => {
   const { employee } = req.body;
   console.log(req.user);
@@ -241,59 +254,19 @@ employeeRoute.route("/update").post(verifyToken, (req, res) => {
   if (employeeType === "owner") {
     console.log(employee);
     Employee.findByIdAndUpdate(employee._id, employee)
-      .then((employee) => {
-        res.status(200).send({ status: "sucess", employee });
+      .then((updatedEmployee) => {
+        res.status(200).send({ status: "success", employee: updatedEmployee });
       })
       .catch((e) => {
         console.log(e);
-        res.status(400).send({ status: "faliure" });
+        res.status(400).send({ status: "failure" });
       });
   } else {
-    res.status(403).send({ status: "Unautorized" });
+    res.status(403).send({ status: "Unauthorized" });
   }
 });
 
-// //employee sign-in
-// employeeRoute.route('/sign-in').post((req, res) => {
-//   const { email, password } = req.body;
-//   console.log(email, password);
-//   Employee.findOne({ email: email })
-//     .populate('employeeType')
-//     .then(employee => {
-//       if (employee) {
-
-//         if (Employee.comparePassword(password)) {
-//           const token = jwt.sign(
-//             {
-//               id: employee._id,
-//               employeeType: employee.employeeType.employeeType,
-//             },
-//             process.env.SECRETKEY,
-//           );
-//           res.status(200).send({
-//             status: 'login-sucess',
-//             token,
-//             employee: {
-//               userName: employee.userName,
-//               employeeType: employee.employeeType.employeeType,
-//             },
-//           });
-//         } else {
-//           res.status(404).send({
-//             status: 'fail',
-//             message: 'Username or Password incorrect',
-//           });
-//         }
-//       } else {
-//         res.status(403).send({ status: 'fail', message: 'User not found' });
-//       }
-//     })
-//     .catch(e => {
-//       console.log(e);
-//       res.status(400).send({ status: 'fail', message: 'Error ' });
-//     });
-// });
-
+// Employee sign-in
 employeeRoute.route("/sign-in").post((req, res) => {
   const { email, password } = req.body;
   console.log(email, password);
@@ -301,10 +274,8 @@ employeeRoute.route("/sign-in").post((req, res) => {
     .populate("employeeType")
     .then((employee) => {
       if (employee) {
-        // Create an instance of the Employee model
         const employeeInstance = new Employee(employee);
 
-        // Call the comparePassword method on the employeeInstance
         employeeInstance
           .comparePassword(password)
           .then((isMatch) => {
@@ -326,22 +297,22 @@ employeeRoute.route("/sign-in").post((req, res) => {
               });
             } else {
               res.status(404).send({
-                status: "fail",
+                status: "failure",
                 message: "Username or Password incorrect",
               });
             }
           })
           .catch((e) => {
             console.log(e);
-            res.status(400).send({ status: "fail", message: "Error" });
+            res.status(400).send({ status: "failure", message: "Error" });
           });
       } else {
-        res.status(403).send({ status: "fail", message: "User not found" });
+        res.status(403).send({ status: "failure", message: "User not found" });
       }
     })
     .catch((e) => {
       console.log(e);
-      res.status(400).send({ status: "fail", message: "Error" });
+      res.status(400).send({ status: "failure", message: "Error" });
     });
 });
 

@@ -104,6 +104,8 @@ const Feedback = require("../models/feedback_model");
  *           $ref: '#/components/schemas/User'
  *         orderId:
  *           $ref: '#/components/schemas/Order'
+ *         sentiment:
+ *           type: string
  *     User:
  *       type: object
  *       properties:
@@ -123,7 +125,7 @@ const Feedback = require("../models/feedback_model");
 
 module.exports = feedbackRoute;
 
-//Add feedback
+// Add feedback
 feedbackRoute.route("/create").post((req, res) => {
   const { review } = req.body;
   const {
@@ -148,10 +150,10 @@ feedbackRoute.route("/create").post((req, res) => {
       feedback
         .save()
         .then((feedback) => {
-          res.status(200).send({ status: "sucess", feedback });
+          res.status(200).send({ status: "success", feedback });
         })
         .catch((e) => {
-          res.status(400).send({ status: "faliure" });
+          res.status(400).send({ status: "failure" });
         });
     })
     .catch((e) => {
@@ -164,24 +166,24 @@ feedbackRoute.route("/create").post((req, res) => {
       feedback
         .save()
         .then((feedback) => {
-          res.status(200).send({ status: "sucess", feedback });
+          res.status(200).send({ status: "success", feedback });
         })
         .catch((e) => {
-          res.status(400).send({ status: "faliure" });
+          res.status(400).send({ status: "failure" });
         });
     });
 });
 
-//View all feedbacks
+// View all feedbacks
 feedbackRoute.route("/get-all").get((req, res) => {
   Feedback.find()
     .populate("userId")
     .populate("orderId")
     .then((feedback) => {
-      res.status(200).send({ status: "sucess", feedback });
+      res.status(200).send({ status: "success", feedback });
     })
     .catch((e) => {
-      res.status(400).send({ status: "faliure" });
+      res.status(400).send({ status: "failure" });
     });
 });
 
