@@ -211,27 +211,88 @@ userRoute.route("/get-all").get((req, res) => {
     });
 });
 
-//User sign-in
+// User sign-in
+// userRoute.route("/sign-in").post((req, res) => {
+//   const { email, password } = req.body;
+//   User.findOne({ email: email, password: password })
+//     .then((user) => {
+//       if (user) {
+//         const { firstName, lastName, _id, email, mobileNumber, dateOfBirth } =
+//           user;
+//         const sendUser = {
+//           firstName,
+//           lastName,
+//           _id,
+//           email,
+//           mobileNumber,
+//           dateOfBirth,
+//         };
+
+//         res.status(200).send({
+//           status: "login-sucess",
+//           user: sendUser,
+//         });
+//       } else {
+//         res
+//           .status(401)
+//           .send({ status: "User not found", errorMsg: "User not found" });
+//       }
+//     })
+//     .catch((e) => {
+//       res.status(400).send({
+//         status: "Bad request",
+//         errorMsg: "Username or password incorrect",
+//       });
+//     });
+// });
+
+// User sign-in
 userRoute.route("/sign-in").post((req, res) => {
   const { email, password } = req.body;
-  User.findOne({ email: email, password: password })
+  User.findOne({ email: email })
     .then((user) => {
       if (user) {
-        const { firstName, lastName, _id, email, mobileNumber, dateOfBirth } =
-          user;
-        const sendUser = {
-          firstName,
-          lastName,
-          _id,
-          email,
-          mobileNumber,
-          dateOfBirth,
-        };
+        // Create an instance of the User model
+        const userInstance = new User(user);
 
-        res.status(200).send({
-          status: "login-sucess",
-          user: sendUser,
-        });
+        // Call the comparePassword method on the userInstance
+        userInstance
+          .comparePassword(password)
+          .then((isMatch) => {
+            if (isMatch) {
+              const {
+                firstName,
+                lastName,
+                _id,
+                email,
+                mobileNumber,
+                dateOfBirth,
+              } = user;
+              const sendUser = {
+                firstName,
+                lastName,
+                _id,
+                email,
+                mobileNumber,
+                dateOfBirth,
+              };
+
+              res.status(200).send({
+                status: "login-success",
+                user: sendUser,
+              });
+            } else {
+              res.status(401).send({
+                status: "Invalid credentials",
+                errorMsg: "Invalid email or password",
+              });
+            }
+          })
+          .catch((e) => {
+            res
+              .status(500)
+              .send({ status: "Internal server error", errorMsg: "Error" });
+          });
       } else {
         res
           .status(401)
